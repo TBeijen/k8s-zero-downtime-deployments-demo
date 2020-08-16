@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "zero-downtime-demo.fullname" . }}
+  labels:
+    {{- include "zero-downtime-demo.labels" . | nindent 4 }}
+data:
+{{ (.Files.Glob "files/server.js").AsConfig | indent 2 }}

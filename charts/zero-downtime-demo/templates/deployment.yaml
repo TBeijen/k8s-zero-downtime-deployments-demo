@@ -18,9 +18,10 @@ spec:
         - name: {{ .Chart.Name }}
           image: node:14.8.0-alpine3.11
           imagePullPolicy: IfNotPresent
+          command: [ "node", "/app/server.js" ]
           ports:
             - name: http
-              containerPort: 80
+              containerPort: 3000
               protocol: TCP
           readinessProbe:
             httpGet:
@@ -28,3 +29,10 @@ spec:
               port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: files
+              mountPath: /app
+      volumes:
+        - name: files
+          configMap:
+            name: {{ include "zero-downtime-demo.fullname" . }}
